@@ -1,4 +1,4 @@
-// cpp_inspect by @cielavenir under Boost Software License.
+// cpp_inspect (C) @cielavenir under Boost Software License.
 
 #include <iostream>
 #include <sstream>
