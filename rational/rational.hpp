@@ -1,5 +1,13 @@
 // cpp_rational (C) by @cielavenir under 2-clause BSDL.
 
+static inline long long gcd2(long long x,long long y){return y?gcd2(y,x%y):x;}
+static inline long long gcd(long long x,long long y){
+	if(x<0)x=-x;
+	if(y<0)y=-y;
+	return gcd2(x,y);
+}
+static inline long long lcm(long long x,long long y){return y/gcd(x,y)*x;}
+
 #ifdef BOOST
 #include <boost/rational.hpp>
 typedef boost::rational<long long> RLL;
