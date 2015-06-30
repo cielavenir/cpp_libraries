@@ -2,6 +2,10 @@
 // (C) @cielavenir under Boost Software License.
 // note: end position is exclusive.
 
+#ifdef BOOST
+#include <boost/rational.hpp>
+#define make_range boost::irange
+#else
 #include <iterator>
 template<typename T>
 class range{
@@ -66,3 +70,4 @@ public:
 };
 template<typename T>
 range<T> make_range(T a,T b,long long d=1){return range<T>(a,b,d);}
+#endif
