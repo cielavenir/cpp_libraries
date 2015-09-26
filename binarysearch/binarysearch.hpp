@@ -14,4 +14,4 @@ T binarysearch(T lo,T hi,T eps,const F &checker){
 	return lo;
 }
 template<typename T,typename F>
-T binarysearch(T lo,T hi,const F &checker){return binarysearch(lo,hi,1,checker);}
+T binarysearch(T lo,T hi,const F &checker){return binarysearch(lo,hi,(T)1,checker);}
