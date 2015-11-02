@@ -4,7 +4,7 @@
 template<typename T,typename F>
 T binarysearch(T lo,T hi,T eps,const F &checker){
 	for(;lo+eps<hi;){
-		T mi=(lo+hi)/2;
+		T mi=lo+(hi-lo)/2;
 		if(checker(mi)){
 			lo=mi;
 		}else{
