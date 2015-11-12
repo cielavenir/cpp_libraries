@@ -2,7 +2,6 @@
 // (C) @cielavenir under Boost Software License.
 
 /// bitset comparator
-
 namespace std{
 	template<size_t N>
 	struct less<bitset<N> > : binary_function <bitset<N>,bitset<N>,bool>{
@@ -18,9 +17,8 @@ namespace std{
 	};
 }
 
-/// pair<int,int> hasher
-
 #if __cplusplus>=201100
+/// pair<int,int> hasher
 namespace std{
 	template<typename I>
 	class hash<pair<I,I>>{
