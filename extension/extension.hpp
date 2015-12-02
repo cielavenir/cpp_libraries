@@ -36,8 +36,8 @@ namespace std{
 	inline void hash_combine(size_t& seed, T const& v){
 		seed ^= hash<T>()(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
 	}
-    template<typename It>
-    inline size_t hash_range(It first, It last){
+	template<typename It>
+	inline size_t hash_range(It first, It last){
 		size_t seed=0;
 		hash_range(seed,first,last);
 		return seed;
