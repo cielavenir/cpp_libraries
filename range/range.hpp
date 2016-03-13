@@ -3,7 +3,7 @@
 // note: end position is exclusive.
 
 #ifdef BOOST
-#include <boost/rational.hpp>
+#include <boost/range.hpp>
 #define make_range boost::irange
 #else
 #include <iterator>
