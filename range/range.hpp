@@ -7,36 +7,41 @@
 #define make_range boost::irange
 #else
 #include <iterator>
-template<typename T>
+#include <functional>
+template<typename I,typename F=std::function<I(I)>>
 class range{
 public:
-	struct iterator{
-		const T a,b;
-		T p;
-		const long long d; //because T might be unsigned.
-		iterator(T _a,T _b,T _p,long long _d=1):a(_a),b(_b),p(_p),d(_d){}
-
+	class iterator{
 	public:
-		typedef T value_type;
-		typedef T& reference;
-		typedef T* pointer;
+		const F& key;
+		I a,b,p;
+		long long d; //because I might be unsigned.
+		iterator(I _a,I _b,I _p,long long _d,const F& _key):a(_a),b(_b),p(_p),d(_d),key(_key){}
+
+		typedef I value_type;
+		typedef I& reference;
+		typedef I* pointer;
 		typedef std::ptrdiff_t difference_type;
 		typedef std::random_access_iterator_tag iterator_category;
 
 		//copy
-		iterator(const iterator &other):a(other.a),b(other.b),p(other.p),d(other.d){}
-		iterator operator=(const iterator &other){return iterator(other.a,other.b,other.p,other.d);}
+		iterator(const iterator &other):a(other.a),b(other.b),p(other.p),d(other.d),key(other.key){}
+		iterator& operator=(const iterator &other){
+			a=other.a,b=other.b,p=other.p,d=other.d;
+			//key=other.key;
+			return *this;
+		}
 
 		//advance
-		iterator& operator+=(T n){p+=n*d;return *this;}
-		iterator& operator-=(T n){return *this+=(-n);}
+		iterator& operator+=(I n){p+=n*d;return *this;}
+		iterator& operator-=(I n){return *this+=(-n);}
 		iterator& operator++(){return *this+=1;}
 		iterator& operator--(){return *this-=1;}
-		iterator operator+(T n) const{return iterator(a,b,p+n*d);}
-		iterator operator-(T n) const{return *this+(-n);}
+		iterator operator+(I n) const{return iterator(a,b,p,d,key);}
+		iterator operator-(I n) const{return *this+(-n);}
 
 		//difference
-		T operator-(const iterator& other) const{return p-other.p;}
+		I operator-(const iterator& other) const{return p-other.p;}
 
 		//equality
 		bool operator==(const iterator& other) const{return a==other.a && b==other.b && d==other.d && p==other.p;}
@@ -47,27 +52,34 @@ public:
 		bool operator>(const iterator& other) const{return a==other.a && b==other.b && d==other.d && p*d>other.p*d;}
 
 		//reference
-		const T& operator*() const{return p;}
+		decltype(auto) operator*() const{return key(p);}
 	};
 
-private:
-	const T a,b;
-	T siz;
+protected:
+	const F key;
+	const I a,b;
+	I siz;
 	long long d;
 public:
-	range(T _a,T _b,long long _d=1):a(_a),b(_b){
-		d=_d;
+	range(I _a,I _b,long long _d=1):a(_a),b(_b),d(_d),key([](I n){return n;}){
+		if(d==0)d=1; //
+		siz=( (d>0?(b-a):(a-b)) - 1)  / (d>0?d:-d);
+	}
+	range(I _a,I _b,const F& _key,long long _d=1):a(_a),b(_b),d(_d),key(_key){
 		if(d==0)d=1; //
 		siz=( (d>0?(b-a):(a-b)) - 1)  / (d>0?d:-d);
 	}
 
-	T operator[](T n){return a+n*d;}
-	iterator begin(){return iterator(a,a+d*siz,a,d);}
-	iterator end(){return iterator(a,a+d*siz,a+d*(siz+1),d);}
-	iterator rbegin(){return iterator(b-d*siz,b,b,-1*d);}
-	iterator rend(){return iterator(b-d*siz,b,b-d*(siz+1),-1*d);}
-	T size(){return siz+1;}
+	decltype(auto) operator[](I n){return key(a+n*d);}
+	iterator begin(){return iterator(a,a+d*siz,a,d,key);}
+	iterator end(){return iterator(a,a+d*siz,a+d*(siz+1),d,key);}
+	iterator rbegin(){return iterator(b-d*siz,b,b,-1*d,key);}
+	iterator rend(){return iterator(b-d*siz,b,b-d*(siz+1),-1*d,key);}
+	I size(){return siz+1;}
 };
-template<typename T>
-range<T> make_range(T a,T b,long long d=1){return range<T>(a,b,d);}
+template<typename I>
+range<I> make_range(I a,I b,long long d=1){return range<I>(a,b,d);}
+template<typename I,typename F>
+range<I,F> makeKeyRange(I a,I b,const F& key,long long d=1){return range<I,F>(a,b,key,d);}
+
 #endif
