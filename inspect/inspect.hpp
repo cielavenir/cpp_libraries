@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <tuple>
 #include <array>
 #include <vector>
 #include <deque>
@@ -30,6 +31,31 @@ namespace std{
 	template<typename T, typename S>
 	ostream& operator<<(ostream &out,const pair<T,S> &e){
 		return out<<"{"<<e.first<<","<<e.second<<"}";
+	}
+	template<int I,typename... X>
+	struct __tuple_inspect__{
+		static inline ostream& rec(ostream &out,const tuple<X...> &t){
+			__tuple_inspect__<I-1,X...>::rec(out,t);
+			cout<<",";
+			return out<<get<I-1>(t);
+		}
+	};
+	template<typename... X>
+	struct __tuple_inspect__<1,X...>{
+		static inline ostream& rec(ostream &out,const tuple<X...> &t){
+			return out<<get<0>(t);
+		}
+	};
+	template<typename... X>
+	struct __tuple_inspect__<0,X...>{
+		static inline ostream& rec(ostream &out,const tuple<X...> &t){
+			return out;
+		}
+	};
+	template<typename... X>
+	ostream& operator<<(ostream &out,const tuple<X...> &t){
+		out<<"{";
+		return __tuple_inspect__<sizeof...(X),X...>::rec(out,t)<<"}";
 	}
 	template<typename T, size_t N>
 	ostream& operator<<(ostream &out,const array<T,N> &v){
