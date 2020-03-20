@@ -33,7 +33,7 @@ namespace std{
 /// hasher
 namespace std{
 	template<typename T>
-	inline void hash_combine(size_t& seed, T const& v){
+	inline void hash_combine(size_t& seed, const T &v){
 		seed ^= hash<T>()(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
 	}
 	template<typename It>
@@ -49,7 +49,7 @@ namespace std{
 	template<typename A,typename B>
 	class hash<pair<A,B>>{
 		public:
-		size_t operator()(pair<A,B> const &p) const{
+		size_t operator()(const pair<A,B> &p) const{
 			size_t seed=0;
 			hash_combine(seed,p.first);
 			hash_combine(seed,p.second);
@@ -59,63 +59,63 @@ namespace std{
 	template<typename T,size_t N>
 	class hash<array<T,N>>{
 		public:
-		size_t operator()(array<T,N> const &container) const{
+		size_t operator()(const array<T,N> &container) const{
 			return hash_range(container.begin(),container.end());
 		}
 	};
 	template<typename T,typename A>
 	class hash<vector<T,A>>{
 		public:
-		size_t operator()(vector<T,A> const &container) const{
+		size_t operator()(const vector<T,A> &container) const{
 			return hash_range(container.begin(),container.end());
 		}
 	};
 	template<typename T,typename A>
 	class hash<deque<T,A>>{
 		public:
-		size_t operator()(deque<T,A> const &container) const{
+		size_t operator()(const deque<T,A> &container) const{
 			return hash_range(container.begin(),container.end());
 		}
 	};
 	template<typename T,typename A>
 	class hash<list<T,A>>{
 		public:
-		size_t operator()(list<T,A> const &container) const{
+		size_t operator()(const list<T,A> &container) const{
 			return hash_range(container.begin(),container.end());
 		}
 	};
 	template<typename T,typename A>
 	class hash<forward_list<T,A>>{
 		public:
-		size_t operator()(forward_list<T,A> const &container) const{
+		size_t operator()(const forward_list<T,A> &container) const{
 			return hash_range(container.begin(),container.end());
 		}
 	};
 	template<typename T,typename C,typename A>
 	class hash<set<T,C,A>>{
 		public:
-		size_t operator()(set<T,C,A> const &container) const{
+		size_t operator()(const set<T,C,A> &container) const{
 			return hash_range(container.begin(),container.end());
 		}
 	};
 	template<typename T,typename C,typename A>
 	class hash<multiset<T,C,A>>{
 		public:
-		size_t operator()(multiset<T,C,A> const &container) const{
+		size_t operator()(const multiset<T,C,A> &container) const{
 			return hash_range(container.begin(),container.end());
 		}
 	};
 	template<typename K,typename T,typename C,typename A>
 	class hash<map<K,T,C,A>>{
 		public:
-		size_t operator()(map<K,T,C,A> const &container) const{
+		size_t operator()(const map<K,T,C,A> &container) const{
 			return hash_range(container.begin(),container.end());
 		}
 	};
 	template<typename K,typename T,typename C,typename A>
 	class hash<multimap<K,T,C,A>>{
 		public:
-		size_t operator()(multimap<K,T,C,A> const &container) const{
+		size_t operator()(const multimap<K,T,C,A> &container) const{
 			return hash_range(container.begin(),container.end());
 		}
 	};
