@@ -22,6 +22,7 @@ namespace std{
 }
 
 #if __cplusplus>=201100
+#include <tuple>
 #include <array>
 #include <vector>
 #include <deque>
@@ -54,6 +55,27 @@ namespace std{
 			hash_combine(seed,p.first);
 			hash_combine(seed,p.second);
 			return seed;
+		}
+	};
+	template<typename... Y>
+	class hash<tuple<Y...>>{
+		public:
+		template<int I,typename... X>
+		struct __tuple_hasher__{
+			static inline size_t rec(const tuple<X...> &t){
+				size_t seed=__tuple_hasher__<I-1,X...>::rec(t);
+				hash_combine(seed,get<I-1>(t));
+				return seed;
+			}
+		};
+		template<typename... X>
+		struct __tuple_hasher__<0,X...>{
+			static inline size_t rec(const tuple<X...> &t){
+				return 0;
+			}
+		};
+		size_t operator()(const tuple<Y...> &t) const{
+			return __tuple_hasher__<sizeof...(Y),Y...>::rec(t);
 		}
 	};
 	template<typename T,size_t N>
