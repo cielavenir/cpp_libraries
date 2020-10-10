@@ -5,7 +5,7 @@
 
 #include <bitset>
 
-/// bitset comparator
+/// bitset comparator (so that it can be put into std::set)
 namespace std{
 	template<size_t N>
 	struct less<bitset<N> > : binary_function <bitset<N>,bitset<N>,bool>{
@@ -15,13 +15,13 @@ namespace std{
 					if(!R.test(i))return false;
 				}else{
 					if(R.test(i))return true;
-			}
+				}
 			return false; //same
 		}
 	};
 }
 
-#if __cplusplus>=201100
+#if __cplusplus>=201103
 #include <tuple>
 #include <array>
 #include <vector>
@@ -30,11 +30,14 @@ namespace std{
 #include <forward_list>
 #include <set>
 #include <map>
+#include <unordered_set>
+#include <unordered_map>
 
 /// hasher
 namespace std{
 	template<typename T>
 	inline void hash_combine(size_t& seed, const T &v){
+		// boost/functional/hash/hash.hpp
 		seed ^= hash<T>()(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
 	}
 	template<typename It>
@@ -141,7 +144,34 @@ namespace std{
 			return hash_range(container.begin(),container.end());
 		}
 	};
-}
+	template<typename T,typename C,typename A>
+	class hash<unordered_set<T,C,A>>{
+		public:
+		size_t operator()(const unordered_set<T,C,A> &container) const{
+			return hash_range(container.begin(),container.end());
+		}
+	};
+	template<typename T,typename C,typename A>
+	class hash<unordered_multiset<T,C,A>>{
+		public:
+		size_t operator()(const unordered_multiset<T,C,A> &container) const{
+			return hash_range(container.begin(),container.end());
+		}
+	};
+	template<typename K,typename T,typename C,typename A>
+	class hash<unordered_map<K,T,C,A>>{
+		public:
+		size_t operator()(const unordered_map<K,T,C,A> &container) const{
+			return hash_range(container.begin(),container.end());
+		}
+	};
+	template<typename K,typename T,typename C,typename A>
+	class hash<unordered_multimap<K,T,C,A>>{
+		public:
+		size_t operator()(const unordered_multimap<K,T,C,A> &container) const{
+			return hash_range(container.begin(),container.end());
+		}
+	};
 
 /*
 	template<typename I>
@@ -150,4 +180,36 @@ namespace std{
 		size_t operator()(pair<I,I> const &p) const {return hash<long long>() (((long long)(p.first))<<32|p.second);}
 	};
 */
+}
+
+#endif
+
+#if __cplusplus>=201402
+#include <tuple>
+
+template<typename... Y>
+class tpl: public std::tuple<Y...>{
+	public:
+    tpl(const tpl&) = default;
+    tpl(tpl&&) = default;
+	tpl(const Y&... elems): std::tuple<Y...>(elems...){}
+	tpl(Y&&... elems): std::tuple<Y...>(elems...){}
+	tpl& operator=(const std::tuple<Y...> &o){(std::tuple<Y...>&)*this = o;return *this;}
+	tpl& operator=(std::tuple<Y...> &&o){(std::tuple<Y...>&)*this = o;return *this;}
+	tpl& operator=(const tpl &o){*this = (std::tuple<Y...>&)o;return *this;}
+	tpl& operator=(tpl &&o){*this = (std::tuple<Y...>&)o;return *this;}
+
+	template<typename T>
+	T& get(){return std::get<T>(*this);}
+	template<int I>
+	auto& get(){return std::get<I>(*this);}
+
+	std::tuple<Y...>& to_tuple(){return (std::tuple<Y...>&)*this;}
+};
+
+namespace std{
+	template<typename... Y>
+	class hash<::tpl<Y...>>: public hash<tuple<Y...>>{};
+}
+
 #endif
