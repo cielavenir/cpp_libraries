@@ -21,6 +21,8 @@ public:
 		tpl<Y...> x={1,false};
 		// need "template" or this snippet does not compile.
 		std::cout << (x.template get<0>()) << std::endl;
+		// this does compile :)
+		std::cout << (x.first()) << std::endl;
 		std::cout << (std::get<0>(x)) << std::endl;
 	};
 };
