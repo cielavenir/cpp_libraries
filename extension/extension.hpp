@@ -207,6 +207,22 @@ class tpl: public std::tuple<Y...>{
 	template<int I>
 	auto& get(){return std::get<I>(*this);}
 
+	// handy ordinal wrapper, just for fun
+	auto& first(){return std::get<0>(*this);}
+	auto& second(){return std::get<1>(*this);}
+	auto& third(){return std::get<2>(*this);}
+	auto& fourth(){return std::get<3>(*this);}
+	auto& fifth(){return std::get<4>(*this);}
+	auto& sixth(){return std::get<5>(*this);}
+	auto& seventh(){return std::get<6>(*this);}
+	auto& eighth(){return std::get<7>(*this);}
+	auto& ninth(){return std::get<8>(*this);}
+	auto& tenth(){return std::get<9>(*this);}
+	auto& eleventh(){return std::get<10>(*this);}
+	auto& twelfth(){return std::get<11>(*this);}
+
+	// It seems tpl can be casted to std::tuple implicitly.
+	// If it does not work, this explicit converter could be used.
 	std::tuple<Y...>& to_tuple(){return (std::tuple<Y...>&)*this;}
 };
 
