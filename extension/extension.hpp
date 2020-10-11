@@ -173,6 +173,9 @@ namespace std{
 		}
 	};
 
+	// it is not possible to calc hash of stack/queue as `container.c` is protected.
+	// anyway no one should be making stack/queue as "key" of dictionary.
+
 /*
 	template<typename I>
 	class hash<pair<I,I>>{
@@ -190,8 +193,8 @@ namespace std{
 template<typename... Y>
 class tpl: public std::tuple<Y...>{
 	public:
-    tpl(const tpl&) = default;
-    tpl(tpl&&) = default;
+	tpl(const tpl&) = default;
+	tpl(tpl&&) = default;
 	tpl(const Y&... elems): std::tuple<Y...>(elems...){}
 	tpl(Y&&... elems): std::tuple<Y...>(elems...){}
 	tpl& operator=(const std::tuple<Y...> &o){(std::tuple<Y...>&)*this = o;return *this;}
@@ -211,5 +214,4 @@ namespace std{
 	template<typename... Y>
 	class hash<::tpl<Y...>>: public hash<tuple<Y...>>{};
 }
-
 #endif
