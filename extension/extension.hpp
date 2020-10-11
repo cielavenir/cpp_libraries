@@ -195,6 +195,8 @@ class tpl: public std::tuple<Y...>{
 	public:
 	tpl(const tpl&) = default;
 	tpl(tpl&&) = default;
+	tpl(const std::tuple<Y...> &o): std::tuple<Y...>(o){}
+	tpl(std::tuple<Y...> &&o): std::tuple<Y...>(o){}
 	tpl(const Y&... elems): std::tuple<Y...>(elems...){}
 	tpl(Y&&... elems): std::tuple<Y...>(elems...){}
 	tpl& operator=(const std::tuple<Y...> &o){(std::tuple<Y...>&)*this = o;return *this;}
@@ -204,8 +206,12 @@ class tpl: public std::tuple<Y...>{
 
 	template<typename T>
 	T& get(){return std::get<T>(*this);}
+	template<typename T>
+	T& get() const{return std::get<T>(*this);}
 	template<int I>
 	auto& get(){return std::get<I>(*this);}
+	template<int I>
+	auto& get() const{return std::get<I>(*this);}
 
 	// handy ordinal wrapper, just for fun
 	auto& first(){return std::get<0>(*this);}
@@ -220,6 +226,19 @@ class tpl: public std::tuple<Y...>{
 	auto& tenth(){return std::get<9>(*this);}
 	auto& eleventh(){return std::get<10>(*this);}
 	auto& twelfth(){return std::get<11>(*this);}
+
+	auto& first() const{return std::get<0>(*this);}
+	auto& second() const{return std::get<1>(*this);}
+	auto& third() const{return std::get<2>(*this);}
+	auto& fourth() const{return std::get<3>(*this);}
+	auto& fifth() const{return std::get<4>(*this);}
+	auto& sixth() const{return std::get<5>(*this);}
+	auto& seventh() const{return std::get<6>(*this);}
+	auto& eighth() const{return std::get<7>(*this);}
+	auto& ninth() const{return std::get<8>(*this);}
+	auto& tenth() const{return std::get<9>(*this);}
+	auto& eleventh() const{return std::get<10>(*this);}
+	auto& twelfth() const{return std::get<11>(*this);}
 
 	// It seems tpl can be casted to std::tuple implicitly.
 	// If it does not work, this explicit converter could be used.
