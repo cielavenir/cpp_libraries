@@ -144,31 +144,31 @@ namespace std{
 			return hash_range(container.begin(),container.end());
 		}
 	};
-	template<typename T,typename C,typename A>
-	class hash<unordered_set<T,C,A>>{
+	template<typename T,typename H,typename P,typename A>
+	class hash<unordered_set<T,H,P,A>>{
 		public:
-		size_t operator()(const unordered_set<T,C,A> &container) const{
+		size_t operator()(const unordered_set<T,H,P,A> &container) const{
 			return hash_range(container.begin(),container.end());
 		}
 	};
-	template<typename T,typename C,typename A>
-	class hash<unordered_multiset<T,C,A>>{
+	template<typename T,typename H,typename P,typename A>
+	class hash<unordered_multiset<T,H,P,A>>{
 		public:
-		size_t operator()(const unordered_multiset<T,C,A> &container) const{
+		size_t operator()(const unordered_multiset<T,H,P,A> &container) const{
 			return hash_range(container.begin(),container.end());
 		}
 	};
-	template<typename K,typename T,typename C,typename A>
-	class hash<unordered_map<K,T,C,A>>{
+	template<typename K,typename T,typename H,typename P,typename A>
+	class hash<unordered_map<K,T,H,P,A>>{
 		public:
-		size_t operator()(const unordered_map<K,T,C,A> &container) const{
+		size_t operator()(const unordered_map<K,T,H,P,A> &container) const{
 			return hash_range(container.begin(),container.end());
 		}
 	};
-	template<typename K,typename T,typename C,typename A>
-	class hash<unordered_multimap<K,T,C,A>>{
+	template<typename K,typename T,typename H,typename P,typename A>
+	class hash<unordered_multimap<K,T,H,P,A>>{
 		public:
-		size_t operator()(const unordered_multimap<K,T,C,A> &container) const{
+		size_t operator()(const unordered_multimap<K,T,H,P,A> &container) const{
 			return hash_range(container.begin(),container.end());
 		}
 	};
