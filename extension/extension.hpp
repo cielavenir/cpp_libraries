@@ -243,6 +243,7 @@ class tpl: public std::tuple<Y...>{
 	// It seems tpl can be casted to std::tuple implicitly.
 	// If it does not work, this explicit converter could be used.
 	std::tuple<Y...>& to_tuple(){return (std::tuple<Y...>&)*this;}
+	std::tuple<Y...>& to_tuple() const{return (std::tuple<Y...>&)*this;}
 };
 
 namespace std{
