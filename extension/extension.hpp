@@ -195,6 +195,7 @@ class tpl: public std::tuple<Y...>{
 	public:
 	tpl(const tpl&) = default;
 	tpl(tpl&&) = default;
+	tpl(): std::tuple<Y...>(){}
 	tpl(const std::tuple<Y...> &o): std::tuple<Y...>(o){}
 	tpl(std::tuple<Y...> &&o): std::tuple<Y...>(o){}
 	tpl(const Y&... elems): std::tuple<Y...>(elems...){}
